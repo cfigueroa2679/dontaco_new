@@ -6,3 +6,9 @@ build/
 .idea/
 .vscode/
 *.iml
+
+# macOS
+.DS_Store
+
+# Otros
+*.log
