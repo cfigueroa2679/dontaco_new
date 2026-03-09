@@ -1,0 +1,49 @@
+{
+  "hosting": {
+    "public": "build/web",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  },
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "dontaco-app",
+          "appId": "1:808063464995:android:3537c692a032351fd92396",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "ios": {
+        "default": {
+          "projectId": "dontaco-app",
+          "appId": "1:808063464995:ios:11151b41e92629ced92396",
+          "uploadDebugSymbols": false,
+          "fileOutput": "ios/Runner/GoogleService-Info.plist"
+        }
+      },
+      "macos": {
+        "default": {
+          "projectId": "dontaco-app",
+          "appId": "1:808063464995:ios:11151b41e92629ced92396",
+          "uploadDebugSymbols": false,
+          "fileOutput": "macos/Runner/GoogleService-Info.plist"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "dontaco-app",
+          "configurations": {
+            "android": "1:808063464995:android:3537c692a032351fd92396",
+            "ios": "1:808063464995:ios:11151b41e92629ced92396",
+            "macos": "1:808063464995:ios:11151b41e92629ced92396",
+            "web": "1:808063464995:web:31c3e1412304a008d92396",
+            "windows": "1:808063464995:web:bcbf64a993915bedd92396"
+          }
+        }
+      }
+    }
+  }
+}

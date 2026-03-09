@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "808063464995",
+    "project_id": "dontaco-app",
+    "storage_bucket": "dontaco-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:808063464995:android:3537c692a032351fd92396",
+        "android_client_info": {
+          "package_name": "com.example.dontaco_new"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDscw2iUEn_ZaPdDM5lxddUNIN2egsHxCo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

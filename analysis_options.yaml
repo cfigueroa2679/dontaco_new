@@ -1,0 +1,12 @@
+include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  exclude:
+    - test_html/**
+    - test/**
+
+linter:
+  rules:
+    # Descomenta o añade reglas según prefieras
+    # avoid_print: false
+    # prefer_single_quotes: true
