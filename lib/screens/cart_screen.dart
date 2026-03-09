@@ -7,7 +7,7 @@ import '../services/firestore_service.dart';
 import 'customer_info_screen.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
-// ⭐ Necesario para abrir WhatsApp en Flutter Web
+// Necesario para abrir WhatsApp en Flutter Web
 import 'dart:html' as html;
 
 class CartScreen extends StatelessWidget {
@@ -160,8 +160,6 @@ class CartScreen extends StatelessWidget {
                         ),
                         onPressed: () async {
                           final prefs = await SharedPreferences.getInstance();
-
-                          // Evitar usar context después de await sin comprobar mounted
                           if (!context.mounted) return;
 
                           final nombreGuardado =
@@ -262,10 +260,7 @@ class CartScreen extends StatelessWidget {
     String metodoPago,
     String comentarios,
   ) async {
-    // --- DEBUG: confirmar que el método se ejecuta ---
-    if (kIsWeb) {
-      html.window.console.log('DEBUG: _procesarPedido llamado');
-    }
+    if (!context.mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text("Procesando pedido...")),
     );
@@ -308,7 +303,6 @@ class CartScreen extends StatelessWidget {
       };
     }).toList();
 
-    // ⭐⭐⭐ FIRESTORE — GUARDAR PEDIDO COMPLETO ⭐⭐⭐
     final firestore = FirestoreService();
 
     await firestore.guardarPedido(
@@ -326,16 +320,12 @@ class CartScreen extends StatelessWidget {
       items: filas,
     );
 
-    // Evitar usar context después de await sin comprobar mounted
     if (!context.mounted) return;
 
-    // ⭐ Google Sheets (tu flujo original)
     await VentasService.enviarPedido(filas);
 
-    // Evitar usar context después de await sin comprobar mounted
     if (!context.mounted) return;
 
-    // ⭐ WhatsApp (usar api.whatsapp.com para mayor compatibilidad)
     final mensaje = StringBuffer();
 
     mensaje.writeln("🔥 Pedido Fiestón #$correlativo 🔥\n");
@@ -375,49 +365,36 @@ class CartScreen extends StatelessWidget {
       mensaje.writeln("Método de pago: Tarjeta de crédito (pago al recibir)");
     }
 
-    // ---------- CAMBIO: usar api.whatsapp.com (más fiable en navegadores móviles) ----------
     final url =
         'https://api.whatsapp.com/send?phone=50252048482&text=${Uri.encodeComponent(mensaje.toString())}';
 
     final redirectUrl =
         "https://dontaco-app.web.app/whatsapp_redirect.html?url=${Uri.encodeComponent(url)}";
 
-    // --- DEBUG: log en consola del navegador ---
-    if (kIsWeb) {
-      html.window.console.log('DEBUG redirectUrl: $redirectUrl');
-      html.window.console.log('DEBUG direct url: $url');
-    }
-
-    // Intento directo: abrir api.whatsapp.com en la misma pestaña (mejor para PWA/Safari)
     try {
       if (kIsWeb) {
         html.window.open(url, "_self");
       }
-    } catch (e) {
-      if (kIsWeb) {
-        html.window.console.log('open direct error: $e');
-      }
+    } catch (_) {
+      // ignore
     }
 
-    // Fallback: navegar al redirect si el intento directo no funcionó
     Future.delayed(const Duration(milliseconds: 300), () {
       try {
         if (kIsWeb) {
           html.window.location.href = redirectUrl;
         }
-      } catch (e) {
+      } catch (_) {
         if (kIsWeb) {
-          html.window.console.log('location.href fallback error: $e');
           try {
             html.window.open(redirectUrl, "_self");
-          } catch (e2) {
-            html.window.console.log('open redirect fallback error: $e2');
+          } catch (_) {
+            // ignore
           }
         }
       }
     });
 
-    // Limpiar carrito y mostrar confirmación local (si la navegación no ocurre)
     try {
       cart.clear();
       if (context.mounted) {
@@ -425,10 +402,8 @@ class CartScreen extends StatelessWidget {
           const SnackBar(content: Text("Pedido enviado correctamente")),
         );
       }
-    } catch (e) {
-      if (kIsWeb) {
-        html.window.console.log('Error clearing cart or showing snackbar: $e');
-      }
+    } catch (_) {
+      // ignore
     }
   }
 }
